@@ -1,0 +1,12 @@
+apiVersion: v2
+name: simple-web
+description: Helm chart for the simple-web application
+
+# Library charts provide utilities and functions for chart development
+type: application
+
+# chart version
+version: 0.1.0
+
+# Version of the application
+appVersion: "1.16.0"
