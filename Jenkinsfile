@@ -20,7 +20,7 @@ pipeline {
       steps {
         sh 'mkdir -p .kube'
         sh 'az login -i'
-        sh 'az aks get-credentials -n devops-interview-aks -g devops-interview-rg --file .kube/config'
+        sh 'az aks get-credentials -n devops-interview-aks -g devops-interview-rg --file .kube/config --overwrite-existing'
         sh 'kubelogin convert-kubeconfig -l msi'
       }
     }
@@ -34,11 +34,6 @@ pipeline {
           }
         }
       }
-    }
-  }
-  post {
-    always {
-      sh 'rm -f .kube/config'
     }
   }
 } 
