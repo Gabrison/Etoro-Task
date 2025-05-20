@@ -6,19 +6,21 @@ pipeline {
   }
 
   environment {
-    KUBECONFIG = "${HOME}/.kube/config"
+    KUBECONFIG = "${WORKSPACE}/.kube/config"
   }
 
   stages {
     stage('Checkout') {
       steps {
         checkout scm
+        sh 'git log -1'
       }
     }
     stage('Azure Login & AKS Auth') {
       steps {
+        sh 'mkdir -p .kube'
         sh 'az login -i'
-        sh 'az aks get-credentials -n devops-interview-aks -g devops-interview-rg'
+        sh 'az aks get-credentials -n devops-interview-aks -g devops-interview-rg --file .kube/config'
         sh 'kubelogin convert-kubeconfig -l msi'
       }
     }
