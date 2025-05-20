@@ -1,2 +1,3 @@
 *.pem
 TASKS.md
+.DS_Store
