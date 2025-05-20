@@ -36,4 +36,9 @@ pipeline {
       }
     }
   }
+  post {
+    always {
+      sh 'rm -f .kube/config'
+    }
+  }
 } 
