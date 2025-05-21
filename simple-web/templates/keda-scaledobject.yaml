@@ -2,7 +2,7 @@ apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: {{ include "simple-web.fullname" . }}-keda
-  namespace: gabriel
+  namespace: {{ .Values.namespace }}
 spec:
   scaleTargetRef:
     name: {{ include "simple-web.fullname" . }}

@@ -3,7 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "simple-web.fullname" . }}
-  namespace: gabriel
+  namespace: {{ .Values.namespace }}
   labels:
     {{- include "simple-web.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}

@@ -1,3 +1,5 @@
+namespace: gabriel
+# Num desired pods
 replicaCount: 1
 
 image:
@@ -19,13 +21,14 @@ ingress:
         - path: /gabriel
           pathType: Prefix
 
+# Resource requests and limits application pods
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 100m      # Maximum CPU the pod can use
+    memory: 128Mi  # Maximum Memory the pod can use
   requests:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 100m      # Guaranteed minimum CPU
+    memory: 128Mi  # Guaranteed minimum Memory
 
 livenessProbe:
   httpGet:
