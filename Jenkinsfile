@@ -3,10 +3,12 @@ pipeline {
 
   parameters {
     choice(name: 'ACTION', choices: ['deploy', 'destroy'], description: 'Choose action: deploy or destroy')
+    string(name: 'NAMESPACE', defaultValue: 'gabriel', description: 'Kubernetes namespace to use')
   }
 
   environment {
     KUBECONFIG = "${WORKSPACE}/.kube/config"
+    NAMESPACE = "${params.NAMESPACE}"
   }
 
   stages {
@@ -18,6 +20,7 @@ pipeline {
     }
     stage('Azure Login & AKS Auth') {
       steps {
+        echo "[INFO] Logging in to Azure and configuring AKS credentials..."
         sh 'mkdir -p .kube'
         sh 'az login -i'
         sh 'az aks get-credentials -n devops-interview-aks -g devops-interview-rg --file .kube/config --overwrite-existing'
@@ -26,7 +29,7 @@ pipeline {
     }
     stage('Lint & Dry Run') {
       steps {
-        // Lint the Helm chart for best practices
+        echo "[INFO] Running Helm lint..."
         sh 'helm lint ./simple-web'
       }
     }
@@ -35,9 +38,10 @@ pipeline {
         expression { params.ACTION == 'deploy' }
       }
       steps {
+        echo "[INFO] Deploying to namespace: ${env.NAMESPACE}"
         script {
           try {
-            sh 'helm upgrade --install simple-web ./simple-web --namespace gabriel'
+            sh 'helm upgrade --install simple-web ./simple-web --namespace ${NAMESPACE}'
           } catch (err) {
             echo "ERROR: ${err}"
             error('Deploy stage failed!')
@@ -50,9 +54,10 @@ pipeline {
         expression { params.ACTION == 'destroy' }
       }
       steps {
+        echo "[INFO] Destroying release in namespace: ${env.NAMESPACE}"
         script {
           try {
-            sh 'helm uninstall simple-web --namespace gabriel'
+            sh 'helm uninstall simple-web --namespace ${NAMESPACE}'
           } catch (err) {
             echo "ERROR: ${err}"
             error('Destroy stage failed!')
@@ -63,7 +68,7 @@ pipeline {
   }
   post {
     always {
-      // Clean up kubeconfig and sensitive files
+      echo "[INFO] Cleaning up kubeconfig and sensitive files..."
       sh 'rm -rf .kube'
     }
   }
