@@ -24,18 +24,32 @@ pipeline {
         sh 'kubelogin convert-kubeconfig -l msi'
       }
     }
-    stage('Deploy or Destroy') {
+    stage('Deploy') {
+      when {
+        expression { params.ACTION == 'deploy' }
+      }
       steps {
         script {
           try {
-            if (params.ACTION == 'deploy') {
-              sh 'helm upgrade --install simple-web ./simple-web --namespace gabriel'
-            } else if (params.ACTION == 'destroy') {
-              sh 'helm uninstall simple-web --namespace gabriel'
-            }
+            sh 'helm upgrade --install simple-web ./simple-web --namespace gabriel'
           } catch (err) {
             echo "ERROR: ${err}"
-            error('Deploy or Destroy stage failed!')
+            error('Deploy stage failed!')
+          }
+        }
+      }
+    }
+    stage('Destroy') {
+      when {
+        expression { params.ACTION == 'destroy' }
+      }
+      steps {
+        script {
+          try {
+            sh 'helm uninstall simple-web --namespace gabriel'
+          } catch (err) {
+            echo "ERROR: ${err}"
+            error('Destroy stage failed!')
           }
         }
       }
