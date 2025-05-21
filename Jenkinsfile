@@ -56,7 +56,13 @@ pipeline {
         echo "[INFO] Destroying release in namespace: ${env.NAMESPACE}"
         script {
           try {
-            sh 'helm uninstall simple-web --namespace ${NAMESPACE}'
+            sh '''
+              helm uninstall simple-web --namespace ${NAMESPACE} 2>&1 | tee uninstall.log
+              if grep -q "release: not found" uninstall.log; then
+                echo "Helm release not found, nothing to uninstall."
+                exit 0
+              fi
+            '''
           } catch (err) {
             echo "ERROR: ${err}"
             error('Destroy stage failed!')
