@@ -89,11 +89,4 @@ It includes the following resources:
   Helm release not found, nothing to uninstall.
   ```
 
-## Jenkins Credentials
-
-```
-username: gabriel
-password: Aa123456
-```
-
 ---
