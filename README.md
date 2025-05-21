@@ -17,7 +17,7 @@ It includes the following resources:
 - **Ingress:** Configured for the nginx ingress controller, routes external traffic to the application at the `/gabriel` path.
 - **KEDA ScaledObject:** Enables autoscaling of the deployment based on CPU and memory usage, with a cron schedule restricting scaling to 8:00 AM–12:00 AM (Asia/Jerusalem timezone).
 
-### 4. Deployment
+### 2. Deployment
 - Installed the Helm chart to the `gabriel` namespace:
   ```sh
   helm install simple-web ./simple-web --namespace gabriel
@@ -27,7 +27,7 @@ It includes the following resources:
   kubectl get all -n gabriel
   ```
 
-### 5. Ingress Setup
+### 3. Ingress Setup
 - Configured Ingress in `values.yaml` to expose the app at `/gabriel` using the nginx ingress controller, with a rewrite annotation to route traffic to the app root (`/`).
 - Verified external access at `http://98.64.41.189/gabriel` and confirmed the app responds correctly.
 
