@@ -18,9 +18,14 @@ ingress:
       paths:
         - path: /gabriel
           pathType: Prefix
-  tls: []
 
-resources: {}
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
 
 livenessProbe:
   httpGet:
@@ -30,11 +35,3 @@ readinessProbe:
   httpGet:
     path: /
     port: http
-
-resources:
-  limits:
-    cpu: 100m
-    memory: 128Mi
-  requests:
-    cpu: 100m
-    memory: 128Mi
