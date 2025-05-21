@@ -3,12 +3,11 @@ pipeline {
 
   parameters {
     choice(name: 'ACTION', choices: ['deploy', 'destroy'], description: 'Choose action: deploy or destroy')
-    string(name: 'NAMESPACE', defaultValue: 'gabriel', description: 'Kubernetes namespace to use')
   }
 
   environment {
     KUBECONFIG = "${WORKSPACE}/.kube/config"
-    NAMESPACE = "${params.NAMESPACE}"
+    NAMESPACE = "gabriel"
   }
 
   stages {
