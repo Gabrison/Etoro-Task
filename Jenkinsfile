@@ -24,6 +24,12 @@ pipeline {
         sh 'kubelogin convert-kubeconfig -l msi'
       }
     }
+    stage('Lint & Dry Run') {
+      steps {
+        // Lint the Helm chart for best practices
+        sh 'helm lint ./simple-web'
+      }
+    }
     stage('Deploy') {
       when {
         expression { params.ACTION == 'deploy' }
@@ -53,6 +59,12 @@ pipeline {
           }
         }
       }
+    }
+  }
+  post {
+    always {
+      // Clean up kubeconfig and sensitive files
+      sh 'rm -rf .kube'
     }
   }
 } 
